@@ -6,7 +6,7 @@ import ShakeApi from './components/ShakeApi';
 
 const Container = styled.View`
 	flex: 1;
-	background-color: papayawhip;
+	background-color: #784150;
 	justify-content: center;
 	align-items: center;
 `;
