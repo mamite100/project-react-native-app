@@ -4,27 +4,10 @@ import React, {
 } from 'react';
 
 import styled from "styled-components/native";
-import {
-  Accelerometer
-} from 'expo-sensors';
-import {
-  ActivityIndicator,
-  Text,
-  ImageBackground,
-  View,
-  TouchableOpacity
-} from "react-native"
+import {View,Text, ActivityIndicator} from 'react-native';
+import {Accelerometer} from 'expo-sensors';
 
 //styled components
-const ScreenBackground = styled.ImageBackground`
-height:100%;
-`;  
-const QuoteContainer = styled.View `
-flex: 1;
-justify-content: center;
-align-items: center; 
-`;
-
 const QuoteText = styled.Text `
 font-size: 25px;
 color: #63182d; 
@@ -33,16 +16,32 @@ text-align: center;
 text-transform: capitalize;
 `;
 
+const ScreenBackground = styled.ImageBackground`
+height:100%;
+`;  
+const Main = styled.View`
+display: flex;
+align-items: center;
+flex-direction: column;
+padding: 50px;
+`;
+const QuoteContainer = styled.View `
+displey: flex; 
+justify-content: center;
+align-items: center; 
+`;
+
 const ShakeText = styled.Text `
 font-size: 25px;
-  color: #521224;
-  margin: 80px 70px;
-  text-align: center;
-  font-weight: bold;
-  text-transform: capitalize;
+color: #521224;
+margin: 80px 70px;
+text-align: center;
+font-weight: slim;
+text-transform: capitalize;
 `;
+
 const ShakeApi = () => {
-    const [data, setData] = useState({
+const [data, setData] = useState({
       x: 0,
       y: 0,
       z: 0,
@@ -50,11 +49,14 @@ const ShakeApi = () => {
     const [quote, setQuote] = useState({});
     const [loading, setLoading] = useState(false);
     const [subscription, setSubscription] = useState(null);
+
     // generates a quote
     useEffect(() => {
       generateQuote();
     }, []);
+
     //when the component gets un-mounted we subribe to the accelerometer 
+
     useEffect(() => {
       Accelerometer.setUpdateInterval(500);
       subscribe();
@@ -66,6 +68,7 @@ const ShakeApi = () => {
         generateQuote();
       }
     }, [data]);
+
     // for better comment 1.11 in monday session
     const subscribe = () => {
 
@@ -79,6 +82,7 @@ const ShakeApi = () => {
       subscription && subscription.remove();
       setSubscription(null);
     };
+
     //fetch the quotes from API
     const generateQuote = () => {
       setLoading(true);
@@ -87,6 +91,9 @@ const ShakeApi = () => {
         .then((data) => setQuote(data))
         .finally(() => setLoading(false));
     };
+
+
+
     // a mathematical calculation to see if the shaking is big enough
     const isShakingEnough = (data) => {
 
@@ -94,22 +101,22 @@ const ShakeApi = () => {
 
       return totalForce > 1.78;
     };
-    if (loading) {
-      return <ActivityIndicator/>
-    }
+    
+    
+
+    const { x, y, z } = data; 
 
     return (
 <ScreenBackground source= {require('../assets/Background-app1.png')}> 
-    <TouchableOpacity onPress = {
-      generateQuote} >
-      <ShakeText > 
-      Quote: {quote.content} 
-      </ShakeText>
-      <QuoteText> 
-      Author:{quote.author}
-      </QuoteText>
- </TouchableOpacity> 
+  <Main>
+      <QuoteContainer>
+          <QuoteText>
+              "{quote.content}"
+          </QuoteText>
+            <ShakeText> Author: {quote.author} </ShakeText>
+    </QuoteContainer>
+  </Main>
 </ScreenBackground>
-    );
- };
-        export default ShakeApi;
+    )};
+
+    export default ShakeApi;
