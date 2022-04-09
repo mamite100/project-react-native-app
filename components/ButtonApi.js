@@ -19,7 +19,7 @@ border-radius: 15px;
 `;
 
 const ButtonText = styled.Text`
-font-weight: slim;
+font-weight:100;
 color: #f7d7cb;
 `;
 
@@ -51,11 +51,11 @@ const generateQuote = () => {
         .finally(() => setLoading(false));
     };
 
-    fetch(URL)
+fetch(URL)
         .then((res) => res.json())
         .then((data) => console.log(data));
 
-    if (loading) {
+if (loading) {
         return <ActivityIndicator/>
     };
 
